@@ -3,76 +3,97 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Facultad de Zootecnia – UNALM</title>
+  <title>FZ-UNALM | RA</title>
+
+  <!-- A-Frame + MindAR (gratis) -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
   <style>
-    body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #f4f6f9; color: #111; }
-    header { padding: 20px 16px; background: #0b3d2e; color: #fff; text-align: center; }
-    header h1 { margin: 0; font-size: 20px; }
-    header p { margin: 6px 0 0; font-size: 14px; opacity: .95; }
-    .wrap { max-width: 820px; margin: 0 auto; padding: 16px; }
-    .card { background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 8px 25px rgba(0,0,0,.06); }
-    .badge { font-size: 12px; padding: 5px 12px; border-radius: 999px; background: #e7f3ef; color: #0b3d2e; font-weight: 600; display:inline-block; margin-bottom:10px; }
-    h2 { margin: 0 0 10px; font-size: 22px; }
-    .grid { display: grid; gap: 14px; margin-top: 10px; }
-    @media (min-width: 680px) { .grid { grid-template-columns: 1fr 1fr; } }
-    .box { background: #f4f6f9; border-radius: 14px; padding: 14px; }
-    .box b { display: block; margin-bottom: 6px; }
-    .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
-    a.btn { text-decoration: none; background: #0b3d2e; color: #fff; padding: 12px 14px; border-radius: 14px; font-weight: 600; font-size: 14px; }
-    a.btn.secondary { background: #1f6f57; }
-    footer { margin-top: 20px; font-size: 12px; color: #555; text-align: center; }
+    body { margin: 0; overflow: hidden; font-family: system-ui, Arial, sans-serif; }
+    .hint {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      padding: 10px 12px; text-align: center;
+      font-size: 14px; color: #fff;
+      background: rgba(0,0,0,.55);
+      z-index: 10;
+    }
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 10px 12px;
+      font-size: 13px; color: #fff;
+      background: rgba(0,0,0,.25);
+      z-index: 10;
+    }
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+    }
   </style>
 </head>
+
 <body>
+  <div class="topbar"><span class="pill">FZ-UNALM · Realidad Aumentada (Piloto)</span></div>
+  <div class="hint">Apunta la cámara al marcador (sticker) para ver la información.</div>
 
-  <header>
-    <h1>Facultad de Zootecnia – UNALM</h1>
-    <p>Guía Informativa Digital · Proyecto Piloto</p>
-  </header>
+  <a-scene
+    mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; uiScanning: true; uiLoading: true;"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: true"
+    renderer="colorManagement: true"
+  >
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <div class="wrap">
-    <div class="card">
+    <!-- TARGET 0 = tu marcador (1 oficina) -->
+    <a-entity mindar-image-target="targetIndex: 0">
 
-      <span class="badge">OFICINA PRINCIPAL</span>
-      <h2>Facultad de Zootecnia</h2>
+      <!-- Panel flotante -->
+      <a-plane position="0 0.55 0" width="1.55" height="0.72" color="#0b3d2e" opacity="0.88"></a-plane>
 
-      <div class="grid">
-        <div class="box">
-          <b>Ubicación</b>
-          Facultad de Zootecnia – Universidad Nacional Agraria La Molina
-        </div>
+      <!-- Texto (igual a tu web informativa, pero en RA) -->
+      <a-text
+        value="FACULTAD DE ZOOTECNIA – UNALM\n\nUbicación: Facultad de Zootecnia\nHorario: 8:00 a.m. – 3:45 p.m.\nCorreo: fzootecnia@lamolina.edu.pe\n\nToca el botón para abrir Maps."
+        align="center"
+        color="#ffffff"
+        width="2.3"
+        position="0 0.60 0.01"
+      ></a-text>
 
-        <div class="box">
-          <b>Horario de Atención</b>
-          Lunes a viernes · 8:00 a.m. – 3:45 p.m.
-        </div>
+      <!-- Botón (se ve como botón; al tocar abre Google Maps) -->
+      <a-plane
+        position="0 0.18 0.02"
+        width="0.95"
+        height="0.18"
+        color="#1f6f57"
+        opacity="0.95"
+        class="clickable"
+        link="href: https://maps.app.goo.gl/Z91gFGijASqcRono6; target: _blank"
+      ></a-plane>
 
-        <div class="box">
-          <b>Correo Electrónico</b>
-          fzootecnia@lamolina.edu.pe
-        </div>
+      <a-text
+        value="Abrir Google Maps"
+        align="center"
+        color="#ffffff"
+        width="2.0"
+        position="0 0.18 0.03"
+      ></a-text>
 
-        <div class="box">
-          <b>Descripción</b>
-          Unidad académica dedicada a la formación profesional, investigación y proyección social en ciencias animales y producción pecuaria.
-        </div>
-      </div>
+    </a-entity>
+  </a-scene>
 
-      <div class="btns">
-        <a class="btn" href="https://maps.app.goo.gl/Z91gFGijASqcRono6" target="_blank">
-          Ver ubicación en Google Maps
-        </a>
-      </div>
-
-    </div>
-
-    <footer>
-      © 2026 – Facultad de Zootecnia · UNALM  
-      Proyecto de innovación digital institucional
-    </footer>
-
-  </div>
-
+  <script>
+    // Hace “clickeables” los objetos con class clickable (para móviles)
+    AFRAME.registerComponent('link', {
+      schema: { href: {type: 'string'}, target: {type: 'string', default: '_blank'} },
+      init: function () {
+        this.el.addEventListener('click', () => {
+          window.open(this.data.href, this.data.target);
+        });
+      }
+    });
+  </script>
 </body>
 </html>
 
